@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Кейс: отделение</title>
+<style>
+:root{--bg:#f4f6f1;--card:#fff;--ink:#1e2521;--sub:#5b6660;--dark:#243b2f;--mid:#4a6b57;--acc:#c98a1b;--ok:#2e7d4f;--okbg:#e3f3e8;--bad:#b3392f;--badbg:#fbe7e5;--line:#cfd8d1}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#151b18;--card:#1f2823;--ink:#e8ede9;--sub:#9aa6a0;--dark:#0f1612;--mid:#6e9a82;--acc:#e0a33a;--ok:#6fcf97;--okbg:#1d3a29;--bad:#ff8f86;--badbg:#44211e;--line:#34413a}}
+:root[data-theme="dark"]{--bg:#151b18;--card:#1f2823;--ink:#e8ede9;--sub:#9aa6a0;--dark:#0f1612;--mid:#6e9a82;--acc:#e0a33a;--ok:#6fcf97;--okbg:#1d3a29;--bad:#ff8f86;--badbg:#44211e;--line:#34413a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.45 -apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+.wrap{max-width:760px;margin:0 auto;padding:16px}
+header{background:var(--dark);color:#fff;border-radius:14px;padding:18px 20px;margin-bottom:14px}
+header small{color:#e0a33a;font-weight:700;letter-spacing:.08em}
+header h1{margin:4px 0 0;font-size:24px;line-height:1.2}
+.bar{height:8px;background:var(--line);border-radius:8px;overflow:hidden;margin:6px 0 14px}
+.bar i{display:block;height:100%;width:0;background:var(--acc);transition:width .3s}
+.meta{display:flex;justify-content:space-between;color:var(--sub);font-size:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+.card h2{margin:0 0 6px;font-size:20px}
+.q{margin:0 0 14px;color:var(--sub)}
+.opt,.btn{display:block;width:100%;text-align:left;padding:13px 14px;margin:8px 0;border-radius:10px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:inherit;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--mid)}
+.opt.ok,.row.ok select{border-color:var(--ok);background:var(--okbg)}
+.opt.bad,.row.bad select{border-color:var(--bad);background:var(--badbg)}
+.opt.sel{border-color:var(--mid);background:var(--okbg)}
+.btn{background:var(--mid);border-color:var(--mid);color:#fff;text-align:center;font-weight:700}
+.btn:disabled{opacity:.45;cursor:default}
+.btn.ghost{background:var(--card);color:var(--ink);border-color:var(--line)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:center;margin:10px 0}
+.row b{font-weight:600}
+select{width:100%;padding:11px 10px;border-radius:10px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:inherit}
+.fb{margin-top:12px;padding:12px 14px;border-radius:10px;font-size:16px}
+.fb.ok{background:var(--okbg);border-left:4px solid var(--ok)}
+.fb.bad{background:var(--badbg);border-left:4px solid var(--bad)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.chip{padding:10px 14px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:inherit;cursor:pointer}
+.chip.used{opacity:.35}
+.slots{display:grid;gap:8px;margin:10px 0}
+.slot{min-height:46px;border:1.5px dashed var(--line);border-radius:10px;padding:10px 14px;color:var(--sub)}
+.slot.filled{border-style:solid;border-color:var(--mid);color:var(--ink);background:var(--okbg)}
+.score{font-size:46px;font-weight:800;margin:4px 0}
+.mist{margin:8px 0;padding:10px 12px;border-radius:10px;background:var(--badbg);font-size:15px}
+.nav{display:flex;gap:10px;margin-top:6px}.nav .btn{margin:8px 0}
+@media (max-width:520px){.row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><small>ОБЗР · 8 КЛАСС · УРОК 9</small><h1>Практический кейс: отделение и его задачи</h1></header>
+<div class="meta"><span id="step">Задание 1 из 6</span><span id="pts">Баллы: 0</span></div>
+<div class="bar"><i id="prog"></i></div>
+<div class="card" id="box"></div>
+</div>
+<script>
+var T=[
+{type:"choice",title:"Кто возглавляет отделение?",q:"Выберите один ответ.",opts:["Наводчик-оператор","Командир отделения","Старший стрелок","Механик-водитель"],ok:1,why:"Отделение возглавляет командир отделения. На БМП он же командир машины."},
+{type:"match",title:"Соотнесите должность и задачу",q:"Для каждой должности выберите её основную задачу.",pairs:[["Механик-водитель","Управляет машиной"],["Пулемётчик","Ведёт огонь из ручного пулемёта"],["Помощник гранатомётчика","Переносит боеприпасы и помогает гранатомётчику"],["Командир отделения","Управляет отделением и отвечает за задачу"]],why:"У каждой должности своя задача, и они дополняют друг друга."},
+{type:"order",title:"Постройте цепочку подразделений",q:"Нажимайте по порядку: от самого малого к самому большому.",items:["Отделение","Взвод","Рота","Батальон"],why:"Отделения объединяются во взводы, взводы — в роты, роты — в батальоны."},
+{type:"choice",title:"Ситуация",q:"Командир отделения отдал приказ. Один боец считает, что можно сделать по-другому. Как правильно?",opts:["Спорить, пока все не согласятся","Выполнить приказ, а свои соображения высказать после","Подождать, что сделают остальные","Сделать по-своему"],ok:1,why:"Таков принцип единоначалия: приказ выполняется, а вопросы и предложения высказываются после, по порядку подчинённости."},
+{type:"tf",title:"Верно или неверно?",q:"Оцените каждое утверждение.",items:[["В типовом отделении на БМП девять человек.",true,"Верно. Три члена экипажа и шесть человек десанта."],["Механик-водитель командует отделением.",false,"Неверно. Отделением командует командир отделения."],["Сила отделения в том, что каждый знает свою задачу и задачи соседей.",true,"Верно. Должности дополняют друг друга."],["Отделение входит в состав взвода.",true,"Верно. Несколько отделений образуют взвод."]],why:""},
+{type:"choice",title:"Вывод",q:"Почему отделение нельзя заменить одной боевой машиной?",opts:["Машина не нужна, нужны только люди","Машина и люди вместе решают разные задачи, одно без другого слабее","Машина дороже людей","В отделении всегда одинаковое число человек"],ok:1,why:"Машина, экипаж и десант дополняют друг друга. Один образец техники не заменяет организованную группу людей."}
+];
+var i=0,score=0,mistakes=[],box=document.getElementById("box");
+function $(s){return document.querySelector(s)}
+function head(t){return "<h2>"+t.title+"</h2><p class='q'>"+t.q+"</p>"}
+function bar(){ $("#step").textContent=i<T.length?"Задание "+(i+1)+" из "+T.length:"Результат"; $("#pts").textContent="Баллы: "+score; $("#prog").style.width=Math.round(i/T.length*100)+"%"}
+function fb(ok,msg){var f=document.createElement("div");f.className="fb "+(ok?"ok":"bad");f.innerHTML=(ok?"Верно. ":"Не совсем. ")+msg;box.appendChild(f);next()}
+function next(){var b=document.createElement("button");b.className="btn";b.textContent=i<T.length-1?"Дальше":"Показать результат";b.onclick=function(){i++;render()};box.appendChild(b);b.scrollIntoView({block:"nearest"})}
+function done(ok,t,pts){if(ok)score+=pts;else mistakes.push(t.title);bar()}
+function render(){bar();if(i>=T.length)return result();var t=T[i];box.innerHTML=head(t);window.scrollTo(0,0);({choice:rChoice,match:rMatch,order:rOrder,tf:rTf})[t.type](t)}
+function rChoice(t){t.opts.forEach(function(o,k){var b=document.createElement("button");b.className="opt";b.textContent=o;b.onclick=function(){var all=box.querySelectorAll(".opt");all.forEach(function(x){x.disabled=true});all[t.ok].classList.add("ok");var ok=k===t.ok;if(!ok)b.classList.add("bad");done(ok,t,1);fb(ok,t.why)};box.appendChild(b)})}
+function rMatch(t){var tasks=t.pairs.map(function(p){return p[1]}).sort(function(a,b){return a.localeCompare(b,"ru")});t.pairs.forEach(function(p,k){var r=document.createElement("div");r.className="row";r.innerHTML="<b>"+p[0]+"</b><select><option value=''>Выберите...</option>"+tasks.map(function(x){return "<option>"+x+"</option>"}).join("")+"</select>";box.appendChild(r)});var b=document.createElement("button");b.className="btn";b.textContent="Проверить";b.onclick=function(){var rows=box.querySelectorAll(".row"),good=0;rows.forEach(function(r,k){var v=r.querySelector("select");v.disabled=true;if(v.value===t.pairs[k][1]){r.classList.add("ok");good++}else{r.classList.add("bad");r.querySelector("select").insertAdjacentHTML("afterend","<div style='font-size:14px;color:var(--sub);margin-top:4px'>Правильно: "+t.pairs[k][1]+"</div>")}});b.remove();var ok=good===t.pairs.length;if(ok)score+=1;else mistakes.push(t.title);bar();fb(ok,"Совпало "+good+" из "+t.pairs.length+". "+t.why)};box.appendChild(b)}
+function rOrder(t){var picked=[],chips=document.createElement("div");chips.className="chips";var slots=document.createElement("div");slots.className="slots";for(var s=0;s<t.items.length;s++){var d=document.createElement("div");d.className="slot";d.textContent=(s+1)+". ";slots.appendChild(d)}
+var shuffled=t.items.slice().sort(function(a,b){return a.length-b.length||a.localeCompare(b)}).reverse();shuffled=[shuffled[1],shuffled[3],shuffled[0],shuffled[2]];
+shuffled.forEach(function(x){var c=document.createElement("button");c.className="chip";c.textContent=x;c.onclick=function(){if(c.disabled)return;c.disabled=true;c.classList.add("used");var sl=slots.children[picked.length];sl.textContent=(picked.length+1)+". "+x;sl.classList.add("filled");picked.push(x);if(picked.length===t.items.length){var ok=picked.every(function(v,k){return v===t.items[k]});done(ok,t,1);fb(ok,ok?t.why:"Правильный порядок: "+t.items.join(" → ")+". "+t.why)}};chips.appendChild(c)});box.appendChild(chips);box.appendChild(slots)}
+function rTf(t){var answered=0,good=0;t.items.forEach(function(it){var w=document.createElement("div");w.style.margin="12px 0";w.innerHTML="<div>"+it[0]+"</div>";var y=document.createElement("button"),n=document.createElement("button");[y,n].forEach(function(b){b.className="opt";b.style.display="inline-block";b.style.width="48%";b.style.textAlign="center"});y.textContent="Верно";n.textContent="Неверно";n.style.marginLeft="4%";function pick(v){y.disabled=n.disabled=true;var ok=v===it[1];if(ok)good++;(v?y:n).classList.add(ok?"ok":"bad");if(!ok)(it[1]?y:n).classList.add("ok");var p=document.createElement("div");p.style.cssText="font-size:15px;color:var(--sub);margin-top:2px";p.textContent=it[2];w.appendChild(p);answered++;if(answered===t.items.length){var all=good===t.items.length;if(all)score+=1;else mistakes.push(t.title);bar();fb(all,"Верных ответов: "+good+" из "+t.items.length+".")}}y.onclick=function(){pick(true)};n.onclick=function(){pick(false)};w.appendChild(y);w.appendChild(n);box.appendChild(w)})}
+function result(){var pct=Math.round(score/T.length*100);var g=pct>=85?"Отличная работа.":pct>=60?"Хороший результат, повторите ошибки.":"Стоит ещё раз просмотреть материалы урока.";box.innerHTML="<h2>Результат</h2><div class='score'>"+score+" из "+T.length+"</div><p>"+g+"</p>"+(mistakes.length?"<div class='mist'><b>Повторить:</b> "+mistakes.join("; ")+"</div>":"")+"<div class='nav'><button class='btn' onclick='restart()'>Пройти ещё раз</button></div>";$("#prog").style.width="100%";$("#step").textContent="Готово"}
+function restart(){i=0;score=0;mistakes=[];render()}
+render();
+</script>
+</body>
+</html>
